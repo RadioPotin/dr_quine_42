@@ -1,7 +1,14 @@
-bits 64
-_start:
-   mov di,42        ; only the low byte of the exit code is kept,
-                    ; so we can use di instead of the full edi/rdi
-   xor eax,eax
-   mov al,60        ; shorter than mov eax,60
-   syscall
+global    _start
+
+section   .text
+_start:   mov       rax, 1                  ; system call for write
+mov       rdi, 1                  ; file handle 1 is stdout
+mov       rsi, message            ; address of string to output
+mov       rdx, 13                 ; number of bytes
+syscall                           ; invoke operating system to do the write
+mov       rax, 60                 ; system call for exit
+xor       rdi, rdi                ; exit code 0
+syscall                           ; invoke operating system to exit
+
+section   .data
+message:  db        "Hello, World", 10      ; note the newline at the end

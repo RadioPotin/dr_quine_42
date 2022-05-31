@@ -1,39 +1,53 @@
-NASM=nasm -f elf64
-CC=gcc -Wall -Werror -Wextra
+SRC_COLLEEN += Colleen.s
+SRC_GRACE += Grace.s
+SRC_SULLY += Sully.s
 
-SRC_COLLEEN=Colleen.s
-DEST_COLLEEN=Colleen
+OBJ_COLLEEN = $(SRC_COLLEEN:%.s=%.o)
+OBJ_GRACE = $(SRC_GRACE:%.s=%.o)
+OBJ_SULLY = $(SRC_SULLY:%.s=%.o)
 
-SRC_GRACE=Grace.s
-DEST_GRACE=Grace
+NAME = dr_quine
 
-SRC_SULLY=Sully.s
-DEST_SULLY=Sully
+COLLEEN = Colleen
+GRACE = Grace
+SULLY = Sully
 
-OBJ_FILES=Colleen.o\
-					Grace.o\
-					Sully*.o
+NASM=nasm
+FLAGS_NASM=-f elf64
+N=$(NASM) $(FLAGS_NASM)
 
-all: colleen grace sully
+GCC=gcc
+GCC_FLAGS=-Wall -Werror -Wextra
+CC=$(GCC) $(GCC_FLAGS)
 
-colleen: $(DEST_COLLEEN)
+.PHONY: all clean fclean re
+
+all: $(NAME)
+
+%.o: %.s
+	$(N) $< -o $@
+
+$(NAME): $(COLLEEN) $(GRACE) $(SULLY)
+
+$(COLLEEN): $(OBJ_COLLEEN)
 	@echo "Compiling COLLEEN"
-	$(CC) -o $(DEST_COLLEEN) $(SRC_COLLEEN)
+	ld -o $@ $<
 
-grace: $(DEST_GRACE)
+$(GRACE): $(OBJ_GRACE)
 	@echo "Compiling GRACE"
-	$(CC) -o $(DEST_GRACE) $(SRC_GRACE)
+	ld -o $@ $<
 
-sully: $(DEST_SULLY)
+$(SULLY): $(OBJ_SULLY)
 	@echo "Compiling SULLY"
-	$(CC) -o $(DEST_SULLY) $(SRC_SULLY)
+	ld -o $@ $<
 
 clean:
+	@rm -f $(OBJ_COLLEEN) $(OBJ_GRACE) $(OBJ_SULLY)
 	@echo "Cleaning objects"
-	rm -rf $(OBJ_FILES)
 
 fclean: clean
+	@rm -f $(COLLEEN) $(GRACE) $(SULLY)
+	@rm -f Grace_kid.s Sully_*
 	@echo "Cleaning all"
-	rm -rf $(DEST_COLLEEN) $(DEST_GRACE) $(DEST_SULLY) Grace_kid.s Sully_*
 
 re: fclean all
