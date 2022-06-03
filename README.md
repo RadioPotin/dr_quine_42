@@ -67,3 +67,5 @@ $> nl macro.c
 [..]
 FT(xxxxxxxx)
 ```
+
+[LINUX ASM HOW TO](https://tldp.org/HOWTO/Assembly-HOWTO/index.html)

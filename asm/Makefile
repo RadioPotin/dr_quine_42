@@ -13,7 +13,7 @@ GRACE = Grace
 SULLY = Sully
 
 NASM=nasm
-FLAGS_NASM=-f elf64
+FLAGS_NASM=-g -f elf64
 N=$(NASM) $(FLAGS_NASM)
 
 GCC=gcc
@@ -30,16 +30,16 @@ all: $(NAME)
 $(NAME): $(COLLEEN) $(GRACE) $(SULLY)
 
 $(COLLEEN): $(OBJ_COLLEEN)
-	@echo "Compiling COLLEEN"
-	ld -o $@ $<
+	@echo "\033[32mCompiling COLLEEN\033[0m"
+	$(CC) -o $@ $<
 
 $(GRACE): $(OBJ_GRACE)
-	@echo "Compiling GRACE"
-	ld -o $@ $<
+	@echo "\033[32mCompiling GRACE\033[0m"
+	$(CC) -ggdb -o $@ $<
 
 $(SULLY): $(OBJ_SULLY)
-	@echo "Compiling SULLY"
-	ld -o $@ $<
+	@echo "\033[32mCompiling SULLY\033[0m"
+	$(CC) -o $@ $<
 
 clean:
 	@rm -f $(OBJ_COLLEEN) $(OBJ_GRACE) $(OBJ_SULLY)
